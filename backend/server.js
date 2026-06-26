@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
+const db = require("./firebase");
 
 const app = express();
 
@@ -39,14 +40,35 @@ app.get("/", (req, res) => {
     res.send("Aplicatia Student Task Manager functioneaza!");
 });
 
-app.get("/api/courses", (req, res) => {
-    res.json(courses);
+app.get("/api/courses", async (req, res) => {
+    try {
+        const snapshot = await db.collection("courses").get();
+
+        const courses = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        res.json(courses);
+    } catch (error) {
+        res.status(500).json({ message: "Eroare la citirea materiilor." });
+    }
 });
 
-app.get("/api/tasks", (req, res) => {
-    res.json(tasks);
-});
+app.get("/api/tasks", async (req, res) => {
+    try {
+        const snapshot = await db.collection("tasks").get();
 
+        const tasks = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        res.json(tasks);
+    } catch (error) {
+        res.status(500).json({ message: "Eroare la citirea temelor." });
+    }
+});
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
