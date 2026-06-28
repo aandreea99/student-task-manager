@@ -4,6 +4,7 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const coursesRoutes = require("./routes/coursesRoutes");
+
 const tasksRoutes = require("./routes/tasksRoutes");
 
 const app = express();

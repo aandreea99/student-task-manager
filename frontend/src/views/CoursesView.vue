@@ -5,47 +5,31 @@
 
         <CourseForm />
 
-        <div v-if="courses.length === 0">
+        <div v-if="coursesStore.courses.length === 0">
             Nu există materii.
         </div>
 
         <CourseList
-            v-else
-            :courses="courses"
-        />
+    v-else
+    :courses="coursesStore.courses"
+/>
 
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 
-import api from "../services/api";
+import { useCoursesStore } from "../stores/courses";
 
 import CourseList from "../components/CourseList.vue";
 import CourseForm from "../components/CourseForm.vue";
 
-const courses = ref([]);
-
-const loadCourses = async () => {
-
-    try {
-
-        const response = await api.get("/courses");
-
-        courses.value = response.data;
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-};
+const coursesStore = useCoursesStore();
 
 onMounted(() => {
 
-    loadCourses();
+    coursesStore.loadCourses();
 
 });
 </script>

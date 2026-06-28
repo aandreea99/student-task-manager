@@ -47,7 +47,9 @@
 
 <script setup>
 import { reactive } from "vue";
-import api from "../services/api";
+import { useCoursesStore } from "../stores/courses";
+
+const coursesStore = useCoursesStore();
 
 const course = reactive({
     name: "",
@@ -57,11 +59,21 @@ const course = reactive({
 
 const saveCourse = async () => {
 
-    console.log("Am apăsat butonul");
+    if (
+        !course.name.trim() ||
+        !course.professor.trim() ||
+        !course.semester
+    ) {
+
+        alert("Completează toate câmpurile!");
+
+        return;
+
+    }
 
     try {
 
-        await api.post("/courses", course);
+        await coursesStore.addCourse(course);
 
         alert("Materia a fost adăugată!");
 
@@ -71,7 +83,6 @@ const saveCourse = async () => {
 
     } catch (error) {
 
-        console.log(error.response);
         console.error(error);
 
     }

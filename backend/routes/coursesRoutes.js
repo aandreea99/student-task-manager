@@ -3,14 +3,17 @@ const router = express.Router();
 
 const {
     getCourses,
-    createCourse
+    createCourse,
+    updateCourse,
+    deleteCourse
 } = require("../controllers/coursesController");
 
 router.get("/", getCourses);
 
-router.post("/", (req, res, next) => {
-    console.log("POST route reached");
-    next();
-}, createCourse);
+router.post("/", createCourse);
+
+router.put("/:id", updateCourse);
+
+router.delete("/:id", deleteCourse);
 
 module.exports = router;
